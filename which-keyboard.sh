@@ -46,7 +46,7 @@
 set -o errexit -o nounset -o noclobber -o pipefail
 
 # Remove leftover files and processes on exit
-trap 'stty echo; rm --recursive -- "$dir"; kill -- ${pids[@]}' EXIT
+trap 'stty echo; rm --recursive -- "$working_directory"; kill -- ${pids[@]}' EXIT
 
 # Discard standard input
 read -r -s -N1000 _ <&0 &
@@ -85,8 +85,8 @@ do
     esac
 done
 
-dir="$(mktemp --directory)"
-cd "$dir"
+working_directory="$(mktemp --directory)"
+cd "$working_directory"
 
 # Log key presses to file
 while read -r -u 9 id
