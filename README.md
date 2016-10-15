@@ -23,3 +23,7 @@ Dependencies: `shellcheck`
 ## Credits
 
 - [How to get keyboard events by @ulidtko](https://unix.stackexchange.com/a/6231/3645)
+
+## [License](LICENSE)
+
+AGPL v3+
