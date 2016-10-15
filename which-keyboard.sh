@@ -62,6 +62,8 @@ do
     fi
 done 9< <(xinput --list --id-only)
 
+printf '%s\n' 'Press any key to continue' >&2
+
 # Check for key presses
 while true
 do
