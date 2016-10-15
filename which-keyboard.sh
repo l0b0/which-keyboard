@@ -45,6 +45,39 @@
 
 set -o errexit -o nounset -o noclobber -o pipefail
 
+script_directory="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+includes="${script_directory}/shell-includes"
+# shellcheck source=shell-includes/error.sh
+. "$includes"/error.sh
+# shellcheck source=shell-includes/usage.sh
+. "$includes"/usage.sh
+# shellcheck source=shell-includes/variables.sh
+. "$includes"/variables.sh
+unset includes
+
+# Process arguments
+arguments="$(getopt --options h --longoptions help --name "$0" -- "$@")" || usage "$ex_usage"
+eval set -- "$arguments"
+unset arguments
+
+while true
+do
+    case $1 in
+        -h|--help)
+            usage
+            ;;
+        --)
+            shift
+            break
+            ;;
+        *)
+            echo "Invalid argument: $1" >&2
+            usage 1
+            ;;
+    esac
+done
+
 # Remove leftover files and processes on exit
 trap 'rm --recursive -- "$dir"; kill -- ${pids[@]}' EXIT
 dir="$(mktemp --directory)"
