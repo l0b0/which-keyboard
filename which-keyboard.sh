@@ -45,6 +45,13 @@
 
 set -o errexit -o nounset -o noclobber -o pipefail
 
+# Remove leftover files and processes on exit
+trap 'stty echo; rm --recursive -- "$dir"; kill -- ${pids[@]}' EXIT
+
+# Discard standard input
+read -r -s -N1000 _ <&0 &
+pids+=($!)
+
 script_directory="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 includes="${script_directory}/shell-includes"
@@ -78,8 +85,6 @@ do
     esac
 done
 
-# Remove leftover files and processes on exit
-trap 'rm --recursive -- "$dir"; kill -- ${pids[@]}' EXIT
 dir="$(mktemp --directory)"
 cd "$dir"
 
